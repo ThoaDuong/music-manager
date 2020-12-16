@@ -14,9 +14,8 @@
         
         init();
         function init() {
-            playlistService.getListPlaylists().then(function(data){
-                $scope.listPlaylistsDefault = data;
-                $scope.isNoItemPlaylist = data.length <= 0 ? true : false;
+                $scope.listPlaylistsDefault = playlistService.getListPlaylists();
+                $scope.isNoItemPlaylist = playlistService.getListPlaylists().length <= 0 ? true : false;
     
                 //Pagination
                 $scope.totalItems = $scope.listPlaylistsDefault.length;
@@ -29,7 +28,6 @@
                 $scope.pageChangedPlaylist = function(value){
                     $scope.currentPagePlaylist = value;
                 }
-            })
         }
         var setPaginationData = function(page, arrPlaylists) {
             $scope.currentPagePlaylist = page;

@@ -12,21 +12,32 @@
 
 
         var onCreateSong = function(song){
-            songService.addSong(song);
+            var result = songService.addSong(song);
+            if(result){
+                $.notify({
+                    message: 'Created success!' 
+                },{
+                    type: 'success',
+                });
+            }else{
+                $.notify({
+                    message: 'Created fail!' 
+                },{
+                    type: 'danger',
+                });
+            }
             $location.path("/manager");
             $rootScope.resetSong();
         }
         var onApplyEditSong = function(song){
             songService.updateSong(song);
-            playlistService.getListPlaylists().then(data => {
-                data.forEach(playlist => {
-                    playlist.songs.forEach((element) => {
-                        if (element.id === song.id) {
-                            element.name = song.name;
-                            element.artist = song.artist;
-                            playlistService.updatePlaylist(playlist);
-                        }
-                    });
+            playlistService.getListPlaylists().forEach(playlist => {
+                playlist.songs.forEach((element) => {
+                    if (element.id === song.id) {
+                        element.name = song.name;
+                        element.artist = song.artist;
+                        playlistService.updatePlaylist(playlist);
+                    }
                 });
             })
             $rootScope.isEdit = false;

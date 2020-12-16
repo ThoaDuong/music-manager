@@ -21,30 +21,27 @@
         init();
 
         function init(){
-            playlistService.getListPlaylists().then(data => {
-                $scope.listPlaylistsDefault = data;
-            })
-            songService.getListSongs().then(data => {
-                $scope.listSongsDefault = data;
-                $scope.defaultSongs = data;
+            $scope.listPlaylistsDefault = playlistService.getListPlaylists();
 
+            $scope.listSongsDefault = songService.getListSongs();
+            $scope.defaultSongs = songService.getListSongs();
+
+            $scope.isNoItemSelected = $scope.selectedSongs.length <= 0 ? true : false;
+            $scope.isNoItemDefault = $scope.defaultSongs.length <= 0 ? true : false;
+            if($rootScope.playlistEdit.id !== -1){
+                $scope.selectedSongs = $rootScope.playlistEdit.songs;
+                $scope.playlistName = $rootScope.playlistEdit.name;
                 $scope.isNoItemSelected = $scope.selectedSongs.length <= 0 ? true : false;
                 $scope.isNoItemDefault = $scope.defaultSongs.length <= 0 ? true : false;
-                if($rootScope.playlistEdit.id !== -1){
-                    $scope.selectedSongs = $rootScope.playlistEdit.songs;
-                    $scope.playlistName = $rootScope.playlistEdit.name;
-                    $scope.isNoItemSelected = $scope.selectedSongs.length <= 0 ? true : false;
-                    $scope.isNoItemDefault = $scope.defaultSongs.length <= 0 ? true : false;
-    
-                    $rootScope.playlistEdit.songs.forEach(root => {
-                        $scope.defaultSongs.forEach((element, index) => {
-                            if(root.id === element.id){
-                                $scope.defaultSongs.splice(index, 1);
-                            }
-                        });
+
+                $rootScope.playlistEdit.songs.forEach(root => {
+                    $scope.defaultSongs.forEach((element, index) => {
+                        if(root.id === element.id){
+                            $scope.defaultSongs.splice(index, 1);
+                        }
                     });
-                }
-            })
+                });
+            }
         }
 
         var resetIsCheck = function(arr, isCheck){
@@ -135,10 +132,14 @@
                 kinds: $scope.playlistKinds,
                 songs: $scope.selectedSongs,
             }
-            playlistService.addPlaylist(newPlaylist).then(data => {
-                $scope.listPlaylistsDefault.push(data);
-                $location.path('/playlist');
-            })
+            playlistService.addPlaylist(newPlaylist);
+            $location.path('/playlist');
+            $.notify({
+                message: 'Created success' 
+            },{
+                type: 'success',
+            });
+            $scope.listPlaylistsDefault = playlistService.getListPlaylists();
             
             multiSelect = [];
             multiSelectRemove = [];
@@ -150,16 +151,15 @@
                 name: $scope.playlistName,
                 songs: $scope.selectedSongs,
             }
-            playlistService.updatePlaylist(updatePlaylist).then(() => {
-                $rootScope.playlistEdit = {
-                    id: -1,
-                    name: '',
-                    kinds: 'R&B',
-                    songs: [],
-                }
-                $rootScope.isEditPlaylist = false;
-                $location.path('playlist');
-            });
+            playlistService.updatePlaylist(updatePlaylist);
+            $rootScope.playlistEdit = {
+                id: -1,
+                name: '',
+                kinds: 'R&B',
+                songs: [],
+            }
+            $rootScope.isEditPlaylist = false;
+            $location.path('playlist');
             
         }
         $scope.onSubmitPlaylist = function(){

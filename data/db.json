@@ -62,14 +62,19 @@
       "artist": "Hòa Minzy"
     },
     {
-      "name": "Hoa vô sắc",
-      "artist": "Jack",
-      "id": 12
-    },
-    {
       "name": "Có chắc yêu là đây",
       "artist": "Sơn Tùng M-TP",
       "id": 13
+    },
+    {
+      "name": "Abc song",
+      "artist": "aba",
+      "id": 14
+    },
+    {
+      "name": "test",
+      "artist": "test a",
+      "id": 15
     }
   ],
   "playlist": [
@@ -235,11 +240,6 @@
       "name": "xyz",
       "songs": [
         {
-          "name": "Hoa vô sắc",
-          "artist": "Jack",
-          "id": 12
-        },
-        {
           "id": 11,
           "name": "Rời bỏ",
           "artist": "Hòa Minzy"
@@ -302,11 +302,6 @@
       "name": "Nhạc việt",
       "kinds": "Pop",
       "songs": [
-        {
-          "name": "Hoa vô sắc",
-          "artist": "Jack",
-          "id": 12
-        },
         {
           "id": 11,
           "name": "Rời bỏ",

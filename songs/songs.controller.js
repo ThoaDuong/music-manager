@@ -5,7 +5,7 @@
     musicManager.controller('songsController', ControllerCtrl)
 
     /** @ngInject */
-    function ControllerCtrl($scope, $location, songService, playlistService, $rootScope) {
+    function ControllerCtrl($scope, $location, songService, playlistService, $rootScope, $window) {
 
         $scope.isCheck = {};
         $scope.isAll = {};
@@ -13,14 +13,12 @@
         $scope.isSingleSelectSong = false;
         $scope.isCheckAnySong = false;
         $scope.numberOfItems = '10';
-        
 
         init();
 
         function init() {
-            songService.getListSongs().then(function(data){
-                $scope.listSongsDefault = data;
-                $scope.isNoItemSong = data.length <= 0 ? true : false;
+                $scope.listSongsDefault = songService.getListSongs();
+                $scope.isNoItemSong = $scope.listSongsDefault.length <= 0 ? true : false;
     
                 //Pagination
                 $scope.totalItems = $scope.listSongsDefault.length;
@@ -33,7 +31,6 @@
                 $scope.pageChanged = function(value){
                     $scope.currentPage = value;
                 }
-            })
         }
         
         var setPagingData = function(page, arrSongs) {
@@ -57,16 +54,14 @@
 
         var onConfirmDeleteSong = function (id) {
             songService.deleteSong(id);
-            playlistService.getListPlaylists().then(data => {
-                data.forEach(playlist => {
-                    playlist.songs.forEach((element, index) => {
-                        if (element.id === id) {
-                            playlist.songs.splice(index, 1);
-                            playlistService.updatePlaylist(playlist);
-                        }
-                    });
-                });
-            })
+            playlistService.getListPlaylists.forEach(playlist => {
+                playlist.songs.forEach((element, index) => {
+                    if (element.id === id) {
+                        playlist.songs.splice(index, 1);
+                        playlistService.updatePlaylist(playlist);
+                    }
+                })
+            });
         }
         $scope.onDeleteSong = function (id) {
             onConfirmDeleteSong(id);
